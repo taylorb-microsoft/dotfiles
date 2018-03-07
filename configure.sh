@@ -93,7 +93,7 @@ then
 	echo ''
 	cd $HOME/.dotfiles && echo "switched to .dotfiles dir..."
 	echo ''
-	echo "Checking out macOS branch..." && git checkout mac
+	echo "Checking out wsl branch..." && git checkout wsl
 	echo ''
 	echo "Now configuring symlinks..." && $HOME/.dotfiles/script/bootstrap
     if [[ $? -eq 0 ]]
@@ -123,16 +123,23 @@ echo ''
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	echo "Now installing az cli..."
-    brew install azure-cli
+    AZ_REPO=$(lsb_release -cs)
+    echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+     sudo tee /etc/apt/sources.list.d/azure-cli.list
+
+    sudo apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893
+    sudo apt-get install apt-transport-https
+    sudo apt-get update && sudo apt-get install azure-cli
+	
     if [[ $? -eq 0 ]]
     then
         echo "Successfully installed Azure CLI 2.0."
     else
         echo "Azure CLI not installed successfully." >&2
-fi
-else 
+    fi
+    else 
     echo "You chose not to install Azure CLI. Exiting now."
-fi
+    fi
 
 # Set default shell to zsh
 echo ''
@@ -141,7 +148,7 @@ echo ''
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	echo "Now setting default shell..."
-    chsh -s $(which zsh); exit 0
+    chsh -s $(which zsh)
     if [[ $? -eq 0 ]]
     then
         echo "Successfully set your default shell to zsh..."
@@ -151,5 +158,6 @@ fi
 else 
     echo "You chose not to set your default shell to zsh. Exiting now..."
 fi
+
 echo ''
-echo '	Badass macOS terminal installed!'
+echo '	Badass WSL terminal installed! Please reboot your computer for changes to be made.'
