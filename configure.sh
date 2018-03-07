@@ -1,18 +1,20 @@
 #!/bin/bash
-# Update pkg lists
+
+# Install brew
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 echo "Updating package lists..."
-sudo apt-get update
+brew update
 # zsh install
 echo ''
 echo "Now installing zsh..."
 echo ''
-sudo apt install zsh -y
+brew install zsh zsh-completions
 
 # Installing git completion
 echo ''
 echo "Now installing git and bash-completion..."
-sudo apt-get install git bash-completion -y
+brew install git && brew install bash-completion
 
 echo ''
 echo "Now configuring git-completion..."
@@ -74,22 +76,10 @@ mv ~/.vim/colors/wombat/colors/* ~/.vim/colors/
 echo ''
 echo "Now installing Midnight commander..."
 echo ''
-sudo apt-get install mc -y
+brew install mc
 
-# Speedtest-cli, pip and jq install
-echo ''
-echo "Now installing Speedtest-cli, pip, tmux and jq..."
-echo ''
-sudo apt-get install jq tmux python-pip -y
-sudo pip install --upgrade pip
-sudo pip install speedtest-cli
-
-# Bash color scheme
-echo ''
-echo "Now installing solarized dark WSL color scheme..."
-echo ''
-wget https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.256dark
-mv dircolors.256dark .dircolors
+# Speedtest-cli and jq install
+brew install jq speedtest-cli
 
 # Pull down personal dotfiles
 echo ''
@@ -108,13 +98,13 @@ then
 	echo "Now configuring symlinks..." && $HOME/.dotfiles/script/bootstrap
     if [[ $? -eq 0 ]]
     then
-        echo "Successfully configured your environment with jldeen's dotfiles..."
+        echo "Successfully configured your environment with jldeen's macOS dotfiles..."
     else
-        echo "jldeen's dotfiles were not applied successfully..." >&2
+        echo "jldeen's macOS dotfiles were not applied successfully..." >&2
 fi
 else 
 	echo ''
-    echo "You chose not to apply jldeen's dotfiles. You will need to configure your environment manually..."
+    echo "You chose not to apply jldeen's macOS dotfiles. You will need to configure your environment manually..."
 	echo ''
 	echo "Setting defaults for .zshrc and .bashrc..."
 	echo ''
